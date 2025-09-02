@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrainBlitz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="mainPage" class="main-page">
+    <h1>⚡ BrainBlitz</h1>
+    <p class="subtitle">Test your brain, beat your score!</p>
+
+    <div id="join" class="join-container">
+      <input id="name" placeholder="Enter your name" />
+      <button onclick="joinGame()">Join Game</button>
+    </div>
+
+    <div class="footer">
+      <p>Demo version • Static leaderboard • Enjoy the confetti 🎉</p>
+    </div>
+  </div>
+
+  <!-- Game section (hidden until joined) -->
+  <div id="game" style="display:none;">
+    <p id="question">Demo controls for testing:</p>
+    <button onclick="answer(10)">Answer Right (+10)</button>
+    <button onclick="answer(0)">Answer Wrong (+0)</button>
+    <button onclick="endGame()">End Game</button>
+
+    <h3>Leaderboard</h3>
+    <ul id="leaderboard"></ul>
+  </div>
+
+  <!-- Meme Popup + Confetti -->
+  <div id="memePopup" class="hidden overlay">
+    <img id="memeImg" class="meme-img" />
+    <canvas id="confettiCanvas" class="confetti"></canvas>
+    <div class="buttons">
+      <button onclick="showLeaderboard()">Back to Leaderboard</button>
+      <button onclick="restartGame()" class="play-again">Play Again</button>
+    </div>
+  </div>
+
+  <audio id="emotionalSound" src="https://www.myinstants.com/media/sounds/emotional-damage.mp3" loop></audio>
+
+  <script src="client.js"></script>
+</body>
+</html>
