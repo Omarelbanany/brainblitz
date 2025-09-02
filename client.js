@@ -1,45 +1,39 @@
-let myId, players = [];
+let myName = "";
+let myScore = 0;
+let leaderboard = [];
 
 function joinGame() {
-  const name = document.getElementById("name").value || "Player";
-  myId = Date.now();
-  document.getElementById("mainPage").style.display = "none";
+  myName = document.getElementById("name").value || "Player";
+  myScore = 0;
+  document.getElementById("join").style.display = "none";
   document.getElementById("game").style.display = "block";
-  players.push({ id: myId, name, score: 0 });
-  renderLeaderboard();
+  renderLeaderboard(); // initial empty leaderboard
 }
 
 function answer(points) {
-  const player = players.find(p => p.id === myId);
-  if (!player) return;
-  player.score += points;
-  renderLeaderboard();
+  myScore += points;
+  alert(`${myName}, your current score: ${myScore}`);
 }
 
 function endGame() {
-  players.sort((a, b) => b.score - a.score);
-  const rank = players.findIndex(p => p.id === myId) + 1;
-  handleEndResult({ rank, leaderboard: players });
-}
+  // generate demo leaderboard
+  leaderboard = [
+    { name: myName, score: myScore },
+    { name: "Alice", score: Math.floor(Math.random() * 50) },
+    { name: "Bob", score: Math.floor(Math.random() * 50) },
+    { name: "Charlie", score: Math.floor(Math.random() * 50) }
+  ];
 
-function renderLeaderboard() {
-  const ul = document.getElementById("leaderboard");
-  ul.innerHTML = "";
-  players.forEach((p, i) => {
-    const li = document.createElement("li");
-    li.textContent = `${i + 1}. ${p.name}: ${p.score}`;
-    ul.appendChild(li);
-  });
-}
+  // sort descending
+  leaderboard.sort((a, b) => b.score - a.score);
+  const rank = leaderboard.findIndex(p => p.name === myName) + 1;
 
-function handleEndResult({ rank, leaderboard }) {
-  const memeUrl = rank === 1
+  // show meme popup
+  const memeUrl = (rank === 1)
     ? "https://sayingimages.com/winner-meme/"
     : "https://i.imgflip.com/43a45p.png";
-
-  const popup = document.getElementById("memePopup");
   document.getElementById("memeImg").src = memeUrl;
-  popup.classList.remove("hidden");
+  document.getElementById("memePopup").classList.remove("hidden");
 
   if (rank === 1) startConfetti();
   else {
@@ -47,12 +41,9 @@ function handleEndResult({ rank, leaderboard }) {
     emo.currentTime = 0;
     emo.play();
   }
-
-  window.finalLeaderboard = leaderboard;
 }
 
 function showLeaderboard() {
-  fadeOutSound(document.getElementById("emotionalSound"), 1200);
   document.getElementById("memePopup").classList.add("hidden");
   renderLeaderboard();
 }
@@ -60,9 +51,21 @@ function showLeaderboard() {
 function restartGame() {
   fadeOutSound(document.getElementById("emotionalSound"), 600);
   document.getElementById("memePopup").classList.add("hidden");
-  players = [];
+  myScore = 0;
+  leaderboard = [];
+  document.getElementById("join").style.display = "block";
   document.getElementById("game").style.display = "none";
-  document.getElementById("mainPage").style.display = "flex";
+  document.getElementById("leaderboard").innerHTML = "";
+}
+
+function renderLeaderboard() {
+  const ul = document.getElementById("leaderboard");
+  ul.innerHTML = "";
+  leaderboard.forEach((p, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${i + 1}. ${p.name}: ${p.score}`;
+    ul.appendChild(li);
+  });
 }
 
 /*** Smooth audio fade ***/
@@ -70,14 +73,8 @@ function fadeOutSound(audio, duration = 1000) {
   if (!audio || audio.paused) return;
   let step = audio.volume / (duration / 50);
   const timer = setInterval(() => {
-    if (audio.volume > step) {
-      audio.volume -= step;
-    } else {
-      audio.pause();
-      audio.currentTime = 0;
-      audio.volume = 1;
-      clearInterval(timer);
-    }
+    if (audio.volume > step) audio.volume -= step;
+    else { audio.pause(); audio.currentTime = 0; audio.volume = 1; clearInterval(timer); }
   }, 50);
 }
 
@@ -98,14 +95,14 @@ function startConfetti() {
   }));
 
   function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     parts.forEach(p => {
       ctx.beginPath();
       ctx.fillStyle = p.color;
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
     });
-    parts.forEach(p => { p.y += (Math.cos(p.d) + 3 + p.r/2)/2; p.x += Math.sin(p.d); });
+    parts.forEach(p => { p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2; p.x += Math.sin(p.d); });
   }
 
   const loop = setInterval(draw, 30);
