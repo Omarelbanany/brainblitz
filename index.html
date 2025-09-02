@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BrainBlitz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>⚡ BrainBlitz</h1>
+
+  <div id="join">
+    <input id="name" placeholder="Enter your name" />
+    <button onclick="joinGame()">Join Game</button>
+  </div>
+
+  <div id="game" style="display:none;">
+    <p id="question">Demo controls for testing:</p>
+    <button onclick="answer(10)">Answer Right (+10)</button>
+    <button onclick="answer(0)">Answer Wrong (+0)</button>
+    <button onclick="endGame()">End Game</button>
+
+    <h3>Leaderboard</h3>
+    <ul id="leaderboard"></ul>
+  </div>
+
+  <!-- Meme Popup + Play Again -->
+  <div id="memePopup" class="hidden overlay">
+    <img id="memeImg" class="meme-img" />
+    <canvas id="confettiCanvas" class="confetti"></canvas>
+    <div class="buttons">
+      <button onclick="showLeaderboard()">Back to Leaderboard</button>
+      <button onclick="restartGame()" class="play-again">Play Again</button>
+    </div>
+  </div>
+
+  <audio id="emotionalSound" src="https://www.myinstants.com/media/sounds/emotional-damage.mp3" loop></audio>
+
+  <script src="client.js"></script>
+</body>
+</html>
